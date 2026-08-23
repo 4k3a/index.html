@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Server Has Been Hacked By #lcnc</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             min-height: 100vh;
             background: #050505;
@@ -16,20 +20,31 @@
             overflow: hidden;
             position: relative;
         }
+        #bgVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(0.3) saturate(0.8);
+        }
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
-            background: radial-gradient(circle at 20% 30%, #111111, #000000 90%);
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.5);
             overflow: hidden;
             pointer-events: none;
         }
         .bg-text {
             position: absolute;
-            color: rgba(80, 80, 80, 0.15);
+            color: rgba(180, 180, 180, 0.15);
             font-size: 1.2rem;
             font-weight: bold;
             white-space: nowrap;
@@ -37,20 +52,62 @@
             text-shadow: 0 0 10px rgba(50, 50, 50, 0.2);
             user-select: none;
         }
-        .bg-text:nth-child(1) { top: 5%; left: -10%; animation-duration: 30s; font-size: 1.5rem; }
-        .bg-text:nth-child(2) { top: 25%; left: -5%; animation-duration: 22s; font-size: 1rem; }
-        .bg-text:nth-child(3) { top: 45%; left: -15%; animation-duration: 35s; font-size: 1.8rem; }
-        .bg-text:nth-child(4) { top: 65%; left: -8%; animation-duration: 28s; font-size: 1.3rem; }
-        .bg-text:nth-child(5) { top: 85%; left: -12%; animation-duration: 32s; font-size: 1.6rem; }
-        .bg-text:nth-child(6) { top: 15%; left: -20%; animation-duration: 40s; font-size: 2rem; }
-        .bg-text:nth-child(7) { top: 55%; left: -25%; animation-duration: 26s; font-size: 1.2rem; }
-        .bg-text:nth-child(8) { top: 75%; left: -18%; animation-duration: 38s; font-size: 1.4rem; }
-
-        @keyframes scrollText {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(100vw + 50%)); }
+        .bg-text:nth-child(1) {
+            top: 5%;
+            left: -10%;
+            animation-duration: 30s;
+            font-size: 1.5rem;
         }
-
+        .bg-text:nth-child(2) {
+            top: 25%;
+            left: -5%;
+            animation-duration: 22s;
+            font-size: 1rem;
+        }
+        .bg-text:nth-child(3) {
+            top: 45%;
+            left: -15%;
+            animation-duration: 35s;
+            font-size: 1.8rem;
+        }
+        .bg-text:nth-child(4) {
+            top: 65%;
+            left: -8%;
+            animation-duration: 28s;
+            font-size: 1.3rem;
+        }
+        .bg-text:nth-child(5) {
+            top: 85%;
+            left: -12%;
+            animation-duration: 32s;
+            font-size: 1.6rem;
+        }
+        .bg-text:nth-child(6) {
+            top: 15%;
+            left: -20%;
+            animation-duration: 40s;
+            font-size: 2rem;
+        }
+        .bg-text:nth-child(7) {
+            top: 55%;
+            left: -25%;
+            animation-duration: 26s;
+            font-size: 1.2rem;
+        }
+        .bg-text:nth-child(8) {
+            top: 75%;
+            left: -18%;
+            animation-duration: 38s;
+            font-size: 1.4rem;
+        }
+        @keyframes scrollText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(100vw + 50%));
+            }
+        }
         .grey-blob {
             position: absolute;
             border-radius: 50%;
@@ -59,15 +116,39 @@
             animation: blobFloat 18s ease-in-out infinite alternate;
             pointer-events: none;
         }
-        .grey-blob:nth-child(9) { width: 300px; height: 300px; top: 10%; left: 5%; animation-duration: 20s; }
-        .grey-blob:nth-child(10) { width: 200px; height: 200px; bottom: 15%; right: 8%; animation-duration: 25s; background: rgba(50, 50, 50, 0.05); }
-        .grey-blob:nth-child(11) { width: 350px; height: 350px; top: 50%; left: 60%; animation-duration: 22s; background: rgba(40, 40, 40, 0.04); }
-
-        @keyframes blobFloat {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-            100% { transform: translate(30px, -40px) scale(1.4); opacity: 0.6; }
+        .grey-blob:nth-child(9) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-duration: 20s;
         }
-
+        .grey-blob:nth-child(10) {
+            width: 200px;
+            height: 200px;
+            bottom: 15%;
+            right: 8%;
+            animation-duration: 25s;
+            background: rgba(50, 50, 50, 0.05);
+        }
+        .grey-blob:nth-child(11) {
+            width: 350px;
+            height: 350px;
+            top: 50%;
+            left: 60%;
+            animation-duration: 22s;
+            background: rgba(40, 40, 40, 0.04);
+        }
+        @keyframes blobFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(30px, -40px) scale(1.4);
+                opacity: 0.6;
+            }
+        }
         #terminal {
             position: relative;
             z-index: 10;
@@ -88,10 +169,24 @@
             padding-bottom: 10px;
             border-bottom: 1px solid rgba(60, 60, 60, 0.2);
         }
-        .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
-        .dot.red { background: #3a3a3a; box-shadow: 0 0 6px #1a1a1a; }
-        .dot.yellow { background: #4a4a4a; box-shadow: 0 0 6px #1a1a1a; }
-        .dot.green { background: #5a5a5a; box-shadow: 0 0 6px #1a1a1a; }
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot.red {
+            background: #3a3a3a;
+            box-shadow: 0 0 6px #1a1a1a;
+        }
+        .dot.yellow {
+            background: #4a4a4a;
+            box-shadow: 0 0 6px #1a1a1a;
+        }
+        .dot.green {
+            background: #5a5a5a;
+            box-shadow: 0 0 6px #1a1a1a;
+        }
         .header-title {
             color: #a0a0a0;
             font-size: 1rem;
@@ -116,7 +211,10 @@
             text-shadow: 0 0 20px rgba(150, 150, 150, 0.1);
             min-height: 80px;
         }
-        #displayText { display: inline-block; word-break: break-all; }
+        #displayText {
+            display: inline-block;
+            word-break: break-all;
+        }
         .cursor {
             display: inline-block;
             width: 4px;
@@ -126,17 +224,43 @@
             animation: blink 0.7s step-end infinite;
             box-shadow: 0 0 10px rgba(160, 160, 160, 0.3);
         }
-        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
         .glitch {
             animation: glitchEffect 0.4s ease-in-out;
         }
         @keyframes glitchEffect {
-            0% { transform: translate(0); text-shadow: 2px 0 #555, -2px 0 #555; }
-            20% { transform: translate(-3px, 1px); text-shadow: -3px 0 #555, 3px 0 #555; }
-            40% { transform: translate(3px, -1px); text-shadow: 3px 0 #555, -3px 0 #555; }
-            60% { transform: translate(-2px, 1px); text-shadow: -2px 0 #555, 2px 0 #555; }
-            80% { transform: translate(2px, -1px); text-shadow: 2px 0 #555, -2px 0 #555; }
-            100% { transform: translate(0); text-shadow: 0 0 20px rgba(150, 150, 150, 0.1); }
+            0% {
+                transform: translate(0);
+                text-shadow: 2px 0 #555, -2px 0 #555;
+            }
+            20% {
+                transform: translate(-3px, 1px);
+                text-shadow: -3px 0 #555, 3px 0 #555;
+            }
+            40% {
+                transform: translate(3px, -1px);
+                text-shadow: 3px 0 #555, -3px 0 #555;
+            }
+            60% {
+                transform: translate(-2px, 1px);
+                text-shadow: -2px 0 #555, 2px 0 #555;
+            }
+            80% {
+                transform: translate(2px, -1px);
+                text-shadow: 2px 0 #555, -2px 0 #555;
+            }
+            100% {
+                transform: translate(0);
+                text-shadow: 0 0 20px rgba(150, 150, 150, 0.1);
+            }
         }
         #logsContainer {
             margin-top: 15px;
@@ -150,10 +274,22 @@
             max-height: 150px;
             overflow-y: auto;
         }
-        .log-entry { opacity: 0; animation: fadeIn 0.3s forwards; }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .log-entry .prefix { color: #aaa; font-weight: bold; }
-        .log-entry .highlight { color: #ddd; }
+        .log-entry {
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        .log-entry .prefix {
+            color: #aaa;
+            font-weight: bold;
+        }
+        .log-entry .highlight {
+            color: #ddd;
+        }
         .status-bar {
             margin-top: 18px;
             display: flex;
@@ -177,16 +313,33 @@
             font-weight: bold;
         }
         @media (max-width: 600px) {
-            #terminal { padding: 15px; }
-            .main-line { font-size: 2rem; }
-            .cursor { height: 2rem; }
+            #terminal {
+                padding: 15px;
+            }
+            .main-line {
+                font-size: 2rem;
+            }
+            .cursor {
+                height: 2rem;
+            }
         }
-        #logsContainer::-webkit-scrollbar { width: 3px; }
-        #logsContainer::-webkit-scrollbar-track { background: rgba(60, 60, 60, 0.05); }
-        #logsContainer::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
+        #logsContainer::-webkit-scrollbar {
+            width: 3px;
+        }
+        #logsContainer::-webkit-scrollbar-track {
+            background: rgba(60, 60, 60, 0.05);
+        }
+        #logsContainer::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
+
+    <video id="bgVideo" autoplay loop playsinline>
+        <source src="https://cdn.discordapp.com/attachments/1529485512262418623/1540794803003072632/oo0.mp4?ex=6a8c91fb&is=6a8b407b&hm=fcc379b0917d234b8d3660eb4c1ccaab016fb43c736ff45eed26fcfa834b8993" type="video/mp4">
+    </video>
 
     <div class="bg-overlay">
         <div class="bg-text">KILL // SYSTEM // oo0</div>
@@ -287,7 +440,8 @@
                         const msgs = ['Maintaining persistence...', 'Idle state...', 'Monitoring traffic...'];
                         const div = document.createElement('div');
                         div.className = 'log-entry';
-                        div.innerHTML = `<span class="prefix">${prefixes[Math.floor(Math.random() * prefixes.length)]}</span> ${msgs[Math.floor(Math.random() * msgs.length)]}`;
+                        div.innerHTML =
+                            `<span class="prefix">${prefixes[Math.floor(Math.random() * prefixes.length)]}</span> ${msgs[Math.floor(Math.random() * msgs.length)]}`;
                         logsContainer.appendChild(div);
                         if (logsContainer.children.length > 10) logsContainer.removeChild(logsContainer.children[0]);
                         logsContainer.scrollTop = logsContainer.scrollHeight;
@@ -412,7 +566,8 @@
                     forceOpenLink();
                     const logDiv = document.createElement('div');
                     logDiv.className = 'log-entry';
-                    logDiv.innerHTML = `<span class="prefix">[SYSTEM]</span> <span class="highlight">Link re-opened (window was closed)</span>`;
+                    logDiv.innerHTML =
+                        `<span class="prefix">[SYSTEM]</span> <span class="highlight">Link re-opened (window was closed)</span>`;
                     logsContainer.appendChild(logDiv);
                     logsContainer.scrollTop = logsContainer.scrollHeight;
                     if (logsContainer.children.length > 12) logsContainer.removeChild(logsContainer.children[0]);
@@ -420,110 +575,31 @@
             }, 1000);
         }
 
-        let audioCtx = null;
-        let soundStarted = false;
-        let soundInterval = null;
+        let videoStarted = false;
+        const bgVideo = document.getElementById('bgVideo');
 
-        function createDeepSound() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            const duration = 3.0;
-            const sampleRate = audioCtx.sampleRate;
-            const bufferSize = Math.floor(duration * sampleRate);
-            const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
-            const data = buffer.getChannelData(0);
-
-            const baseFreq = 45 + Math.random() * 35;
-            for (let i = 0; i < bufferSize; i++) {
-                const t = i / sampleRate;
-                const envelope = Math.exp(-t * 0.8);
-                const noise = (Math.random() * 2 - 1) * 0.6;
-                const tone = Math.sin(2 * Math.PI * baseFreq * t) * 0.4;
-                const mod = Math.sin(2 * Math.PI * 2.5 * t) * 0.2;
-                data[i] = (noise + tone + mod) * envelope * 0.7;
-            }
-
-            const source = audioCtx.createBufferSource();
-            source.buffer = buffer;
-
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.value = 120;
-            filter.Q.value = 0.5;
-
-            const gain = audioCtx.createGain();
-            gain.gain.value = 2.5;
-
-            const convolver = audioCtx.createConvolver();
-            const impulseLength = sampleRate * 0.3;
-            const impulseBuffer = audioCtx.createBuffer(1, impulseLength, sampleRate);
-            const impulseData = impulseBuffer.getChannelData(0);
-            for (let i = 0; i < impulseLength; i++) {
-                const decay = Math.exp(-i / (sampleRate * 0.15));
-                impulseData[i] = (Math.random() * 2 - 1) * decay * 0.5;
-            }
-            convolver.buffer = impulseBuffer;
-
-            source.connect(filter);
-            filter.connect(convolver);
-            convolver.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            source.start();
-            source.stop(audioCtx.currentTime + duration + 0.5);
+        function enableVideoSound() {
+            if (videoStarted) return;
+            videoStarted = true;
+            bgVideo.muted = false;
+            bgVideo.play().catch(() => {
+                setTimeout(() => bgVideo.play().catch(() => {}), 100);
+            });
         }
-
-        function playDeepSound() {
-            try {
-                if (audioCtx && audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                createDeepSound();
-            } catch (e) {}
-        }
-
-        function startSound() {
-            if (soundStarted) return;
-            soundStarted = true;
-            playDeepSound();
-            if (soundInterval) clearInterval(soundInterval);
-            soundInterval = setInterval(playDeepSound, 2000);
-        }
-
-        setTimeout(() => {
-            try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume().then(() => {
-                        startSound();
-                    }).catch(() => {});
-                } else {
-                    startSound();
-                }
-            } catch (e) {}
-        }, 500);
 
         document.addEventListener('click', function() {
-            if (!soundStarted) {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume().then(() => {
-                        startSound();
-                    }).catch(() => {});
-                } else {
-                    startSound();
-                }
-            }
+            enableVideoSound();
             if (!linkWindow || linkWindow.closed) {
                 forceOpenLink();
             }
         });
+
+        setTimeout(() => {
+            if (bgVideo.readyState >= 2) {
+                bgVideo.muted = false;
+                bgVideo.play().catch(() => {});
+            }
+        }, 1000);
 
         window.onload = function() {
             setTimeout(typeWriter, 300);
